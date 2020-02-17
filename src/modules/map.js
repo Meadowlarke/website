@@ -10,6 +10,7 @@ class Map{
 		this.create_blank_map = this.create_blank_map.bind(this);
 		this.create_preset_map = this.create_preset_map.bind(this);
 		this.map = this.create_preset_map();
+		this.curr_vis = -1
 		this.addAreaToMap = this.addAreaToMap.bind(this);
 		this.getMap = this.getMap.bind(this);
 		this.removeAreaFromMap = this.removeAreaFromMap.bind(this);
@@ -27,14 +28,16 @@ class Map{
 		{
 		  name: "my-map",
 		  areas: [
-		    { id : 1, name: "Recordings", shape: "poly", coords: [32,304,35,488,222,450,223,360,468,349,462,283,117,296],                        text_visibility : "hidden" , fillColor: "blue"  , optional_override : [-100,0] },
-		    { id : 2, name: "About", shape: "poly", coords: [299,388,324,393,373,572,240,566,299,476],                                           text_visibility : "hidden" , fillColor: "pink"   },
-		    { id : 3, name: "Press", shape: "poly", coords: [339,422,405,366,469,476,406,557],                                                   text_visibility : "hidden" , fillColor: "yellow" },
-		    { id : 4, name: "Book", shape: "poly", coords: [235,397,282,398,285,472,224,558,30,568,35,506,234,461],                              text_visibility : "hidden" , fillColor: "red"    },
-		    { id : 5, name: "Concerts", shape: "poly", coords: [29,54,78,94,26,158,70,191,27,269,330,273,470,240,412,192,463,133,323,62,139,53], text_visibility : "hidden" , fillColor: "yellow" },
+		    { id : 1, name: "Recordings", shape: "poly", coords: [32,304,35,488,222,450,223,360,468,349,462,283,117,296],                       fillColor: "blue"  , optional_override : [-100,0] },
+		    { id : 2, name: "About", shape: "poly", coords: [299,388,324,393,373,572,240,566,299,476],                                          fillColor: "pink"   },
+		    { id : 3, name: "Press", shape: "poly", coords: [339,422,405,366,469,476,406,557],                                                  fillColor: "yellow" },
+		    { id : 4, name: "Book", shape: "poly", coords: [235,397,282,398,285,472,224,558,30,568,35,506,234,461],                             fillColor: "red"    },
+		    { id : 5, name: "Concerts", shape: "poly", coords: [29,54,78,94,26,158,70,191,27,269,330,273,470,240,412,192,463,133,323,62,139,53], fillColor: "yellow" },
 			  ]
 		}
 	)}
+
+	
 
 
 	//returns a blank map
@@ -47,18 +50,7 @@ class Map{
 
 	makeTextOnMapVisible(id){
 		let cnt = 0;
-		for(const area of this.map.areas){
-			if (id === area.id){
-				//console.log("THERE")
-				this.map.areas[cnt].text_visibility = "visible";
-			}
-			else{
-				//console.log("HERE")
-				this.map.areas[cnt].text_visibility = "hidden";
-				//console.log(this.map)
-			}
-			cnt+=1;
-		}
+		this.curr_vis = id
 	}
 
 	//adds a hotspot/area to the image map
@@ -135,6 +127,11 @@ class Map{
 			   	 	x += d.optional_override[0]
 			   	 	y += d.optional_override[1]
 			   }
+
+			   let vis = "hidden"
+			   if (d.id == this.curr_vis){
+			   		vis = "visible"
+			   	}
 		       const CSSPosition = {
 		       		position : "absolute",
 		       		left : x.toString() + "px",
@@ -143,7 +140,7 @@ class Map{
 		       		fontSize : "20px",
 		       		color: "orange",
 		       		fontWeight: 900,
-		       		visibility: d.text_visibility,
+		       		visibility: vis,
 		       		MozUserSelect:"none",
 					WebkitUserSelect:"none",
 					msUserSelect:"none",
