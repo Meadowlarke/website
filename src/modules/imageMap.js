@@ -9,9 +9,11 @@ class ImageSelector extends Component{
 		super(props);
 		this.logStr = " "
 		this.MAP = new Map();
+		this.MAP.createTextMap()
 		//React-image-mapper package functions
 		this.clicked = this.clicked.bind(this);
 		this.load = this.load.bind(this);
+		this.moveOnArea = this.moveOnArea.bind(this)
 		//this.clickedOutside = this.clickedOutside.bind(this);
 		//last clicked is used for double click functionality
 		this.lastClicked = {};
@@ -23,33 +25,29 @@ class ImageSelector extends Component{
 
 	//this function handles clicking on a hotspot area
 	clicked(area,i,evt) {
-		const DOUBLE_CLICK_SPEED = 500;
-		/*this if statement handles double click testing
-		lastClicked is a json object containing hot spot indexes
-		and the time they were last clicked. */
-		if (i in this.lastClicked) {
-			if ((Date.now() - this.lastClicked[i]) < DOUBLE_CLICK_SPEED){
-				//if an area was double clicked, remove it from the map. 
-				this.MAP.removeAreaFromMap(i);
-				//fixes a bug where indexes shift when an element is deleted
-				for (var member in this.lastClicked) delete this.lastClicked[member];
-				//recreate the text map as circles have been changed.
-				this.MAP.createTextMap()
-			}
-		}
-		//update the lastClicked time for the area that was clicked
-		this.lastClicked[i] = Date.now()
-		//redraw the component
 		this.setState({})
 	}
-
-
-
 
 	load() {
 	}
 
-	/*Good de*/ 
+	enterArea(area) {
+		this.MAP.makeTextOnMapVisible(area.id)
+		this.MAP.createTextMap()
+		this.setState({hoveredArea: area})
+		this.setState({
+			hoveredArea: area
+		});
+	}
+
+	moveOnArea(area) {
+		//this.MAP.makeTextOnMapVisible(area.id)
+		//this.MAP.createTextMap()
+		//this.setState({hoveredArea: area})
+		
+	}
+
+	/*Good dev function but don't need at present*/ 
 	/*
 	clickedOutside(evt) {
 		//Add new hotspot to map
@@ -84,8 +82,8 @@ class ImageSelector extends Component{
 							width={500}
 							onLoad={() => this.load()}
 							onClick={(area,i,e) => this.clicked(area,i,e)}
-							onContextMenu={(area,i,e) => this.clicked(area,i,e)}
-							onImageClick={evt => this.clickedOutside(evt)}
+							onMouseEnter={area => this.enterArea(area)}
+							onMouseMove={(area, _, evt) => this.moveOnArea(area, evt)}
 							lineWidth={4}
 							strokeColor={"white"}
 						></ImageMapper>
@@ -96,8 +94,6 @@ class ImageSelector extends Component{
 					           	);
 				       	 })
 				        }
-				        
-				    	
 			        </div>
 				</div>
 			</div>
