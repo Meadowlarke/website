@@ -33,11 +33,11 @@ class Map{
 		{
 		  name: "my-map",
 		  areas: [
-		    { id : 1, url : "content/Recordings.html", name: "Recordings", shape: "poly", coords: [32,304,35,488,222,450,223,360,468,349,462,283,117,296],                      fillColor:  "#516987"  , optional_override : [-150,0] },
-		    { id : 2, url : "content/About.html", name: "About", shape: "poly", coords: [299,388,324,393,373,572,240,566,299,476],                                              fillColor:  "#AC7F5B"  , optional_override : [-30,30]},
-		    { id : 3, url : "content/Press.html", name: "Press", shape: "poly", coords: [339,422,405,366,469,476,406,557],                                                      fillColor:  "#E4AD74"  , optional_override : [-30,0]},
-		    { id : 4, url : "content/Book.html", name: "Book", shape: "poly", coords: [235,397,282,398,285,472,224,558,95,568,100,506,234,461],                                 fillColor:  "#84BFD1"  , optional_override : [-20,10]},
-		    { id : 5, url : "content/Concerts.html", name: "Concerts", shape: "poly", coords: [29,54,78,94,26,158,70,191,27,269,330,273,470,240,412,192,463,133,323,62,139,53], fillColor: "#647B3F"  },
+		    { id : 1, url : "content/Recordings.html", name: "Recordings", shape: "poly", coords: [32,304,35,488,222,450,223,360,468,349,462,283,117,296],                      fillColor:  "rgba(81,105,135,.8)"  , optional_override : [-150,0] },
+		    { id : 2, url : "content/About.html", name: "About", shape: "poly", coords: [299,388,324,393,373,572,240,566,299,476],                                              fillColor:  "rgba(172,127,91,.8)"  , optional_override : [-30,30]},
+		    { id : 3, url : "content/Press.html", name: "Press", shape: "poly", coords: [339,422,405,366,469,476,406,557],                                                      fillColor:  "rgba(228,173,116,.8)"  , optional_override : [-30,0]},
+		    { id : 4, url : "content/Book.html", name: "Book", shape: "poly", coords: [235,397,282,398,285,472,224,558,95,568,100,506,234,461],                                 fillColor:  "rgba(132,191,209,.8)"  , optional_override : [-20,10]},
+		    { id : 5, url : "content/Concerts.html", name: "Concerts", shape: "poly", coords: [29,54,78,94,26,158,70,191,27,269,330,273,470,240,412,192,463,133,323,62,139,53], fillColor: "rgba(100,123,63,.8)"  },
 			  ]
 		}
 	)}

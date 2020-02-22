@@ -7,6 +7,10 @@ function App() {
     <div className="App">
       <h1>MEADOWLARKE</h1>
       <ImageSelector className="img-selector" />
+
+      <h2>
+      ``'-.,_,.-'``'-.,_,.='``'-.,_,.-'``'-.,_,.='``
+      </h2>
     </div>
   );
 }

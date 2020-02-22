@@ -47,10 +47,16 @@ class ImageSelector extends Component{
 
 	//this function handles clicking on a hotspot area
 	clicked(area,i,evt) {
-		window.location.assign(area['url']);
+		console.log(this.state);
+		evt.preventDefault();
+		this.setState({
+			redirect_path : area['url'],
+			redirect : true
+		});
 	}
 
 	load() {
+		this.setState({})
 	}
 
 	enterArea(area) {
@@ -98,7 +104,8 @@ class ImageSelector extends Component{
 	*/
 	render() {
 		if (this.state.redirect) {
-    		return (<Redirect push to={this.state.redirect_path} />);
+			//window.location.assign("https://meadowlarkband.github.io/website/");
+			window.location.assign(this.state.redirect_path);
   		}
 		return (
 			<div className="grid"
