@@ -15,7 +15,9 @@ class ImageSelector extends Component{
 		//React-image-mapper package functions
 		this.clicked = this.clicked.bind(this);
 		this.load = this.load.bind(this);
-		this.moveOnArea = this.moveOnArea.bind(this)
+		this.moveOnArea = this.moveOnArea.bind(this);
+		this.enterArea = this.enterArea.bind(this);
+		this.leaveArea = this.leaveArea.bind(this);
 		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 		this.state = {
 			width: 0, 
@@ -55,9 +57,13 @@ class ImageSelector extends Component{
 		this.MAP.makeTextOnMapVisible(area.id)
 		this.MAP.createTextMap()
 		this.setState({hoveredArea: area})
-		this.setState({
-			hoveredArea: area
-		});
+	}
+
+	leaveArea(area){
+		this.MAP.makeTextOnMapVisible(-1, true)
+		this.MAP.createTextMap()
+		this.setState({hoveredArea: undefined})
+
 	}
 
 	moveOnArea(area) {
@@ -106,6 +112,7 @@ class ImageSelector extends Component{
 							onLoad={() => this.load()}
 							onClick={(area,i,e) => this.clicked(area,i,e)}
 							onMouseEnter={area => this.enterArea(area)}
+							onMouseLeave={area => this.leaveArea(area)}
 							onMouseMove={(area, _, evt) => this.moveOnArea(area, evt)}
 							lineWidth={4}
 							strokeColor={"white"}
