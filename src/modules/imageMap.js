@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import ImageMapper from 'react-image-mapper'
-import Map from './map'
+import ImageMapper from 'react-image-mapper';
+import Map from './map';
+import { Redirect } from 'react-router';
+
 
 
 class ImageSelector extends Component{
@@ -14,18 +16,36 @@ class ImageSelector extends Component{
 		this.clicked = this.clicked.bind(this);
 		this.load = this.load.bind(this);
 		this.moveOnArea = this.moveOnArea.bind(this)
-		//this.clickedOutside = this.clickedOutside.bind(this);
-		//last clicked is used for double click functionality
-		this.lastClicked = {};
+		this.updateWindowDimensions = this.updateWindowDimensions.bind(this);
 		this.state = {
-			url: '/harlanSiteMap.png'
+			width: 0, 
+			height: 0,
+			screen_scale : .8,
+			max_width : 500,
+			url: '/harlanSiteMap.png',
+			redirect: false,
+			redirect_path : ""
 		};
+	}
+
+	componentDidMount() {
+	  this.updateWindowDimensions();
+	  window.addEventListener('resize', this.updateWindowDimensions);
+	}
+
+	componentWillUnmount() {
+	  window.removeEventListener('resize', this.updateWindowDimensions);
+	}
+
+	updateWindowDimensions() {
+	  this.setState({ width: window.innerWidth, height: window.innerHeight });
+	  this.MAP.scaleMap(window.innerWidth, window.innerHeight, this.state.max_width, this.state.screen_scale);
 	}
 
 
 	//this function handles clicking on a hotspot area
 	clicked(area,i,evt) {
-		this.setState({})
+		window.location.assign(area['url']);
 	}
 
 	load() {
@@ -71,6 +91,9 @@ class ImageSelector extends Component{
 	https://github.com/coldiary/react-image-mapper
 	*/
 	render() {
+		if (this.state.redirect) {
+    		return (<Redirect push to={this.state.redirect_path} />);
+  		}
 		return (
 			<div className="grid"
 			onContextMenu={(e)=> e.preventDefault()}>
@@ -79,7 +102,7 @@ class ImageSelector extends Component{
 						<ImageMapper	
 							src={'harlanSiteMap.png'}
 							map={this.MAP.getMap()}
-							width={500}
+							width={Math.min((this.state.width * this.state.screen_scale),this.state.max_width)}
 							onLoad={() => this.load()}
 							onClick={(area,i,e) => this.clicked(area,i,e)}
 							onMouseEnter={area => this.enterArea(area)}

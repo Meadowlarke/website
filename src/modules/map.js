@@ -10,7 +10,9 @@ class Map{
 		this.create_blank_map = this.create_blank_map.bind(this);
 		this.create_preset_map = this.create_preset_map.bind(this);
 		this.map = this.create_preset_map();
-		this.curr_vis = -1
+		this.curr_vis = -1;
+		this.MAP_SCALE_X = 500;
+		this.MAP_SCALE_Y = 800;
 		this.addAreaToMap = this.addAreaToMap.bind(this);
 		this.getMap = this.getMap.bind(this);
 		this.removeAreaFromMap = this.removeAreaFromMap.bind(this);
@@ -22,22 +24,50 @@ class Map{
 		this.textMap = [];
 		this.getTextMap = this.getTextMap.bind(this);
 		this.reDrawMap = this.reDrawMap.bind(this);
+		this.scaleMap = this.scaleMap.bind(this);
 	}
 
-	create_preset_map(){return(
+	create_preset_map(){
+
+		return(
 		{
 		  name: "my-map",
 		  areas: [
-		    { id : 1, name: "Recordings", shape: "poly", coords: [32,304,35,488,222,450,223,360,468,349,462,283,117,296],                       fillColor: "blue"  , optional_override : [-100,0] },
-		    { id : 2, name: "About", shape: "poly", coords: [299,388,324,393,373,572,240,566,299,476],                                          fillColor: "pink"   },
-		    { id : 3, name: "Press", shape: "poly", coords: [339,422,405,366,469,476,406,557],                                                  fillColor: "yellow" },
-		    { id : 4, name: "Book", shape: "poly", coords: [235,397,282,398,285,472,224,558,30,568,35,506,234,461],                             fillColor: "red"    },
-		    { id : 5, name: "Concerts", shape: "poly", coords: [29,54,78,94,26,158,70,191,27,269,330,273,470,240,412,192,463,133,323,62,139,53], fillColor: "yellow" },
+		    { id : 1, url : "/content/Recordings.html", name: "Recordings", shape: "poly", coords: [32,304,35,488,222,450,223,360,468,349,462,283,117,296],                        fillColor:  "#516987"  , optional_override : [-150,0] },
+		    { id : 2, url : "/content/About.html", name: "About", shape: "poly", coords: [299,388,324,393,373,572,240,566,299,476],                                           fillColor:  "#AC7F5B"   },
+		    { id : 3, url : "/content/Press.html", name: "Press", shape: "poly", coords: [339,422,405,366,469,476,406,557],                                                   fillColor:  "#E4AD74" },
+		    { id : 4, url : "/content/Book.html", name: "Book", shape: "poly", coords: [235,397,282,398,285,472,224,558,95,568,100,506,234,461],                             fillColor:  "#84BFD1"    },
+		    { id : 5, url : "/content/Concerts.html", name: "Concerts", shape: "poly", coords: [29,54,78,94,26,158,70,191,27,269,330,273,470,240,412,192,463,133,323,62,139,53], fillColor: "#647B3F" },
 			  ]
 		}
 	)}
 
-	
+	scaleMap(width,height,max_width,screen_scale){
+		const multiplier = ((width*screen_scale)/this.MAP_SCALE);
+		let new_map = this.create_preset_map();
+		const adj_width  = Math.min((width*screen_scale),max_width);
+		const adj_height = Math.min((this.MAP_SCALE_Y*((width*screen_scale)/this.MAP_SCALE_X)),(max_width/this.MAP_SCALE_X)*this.MAP_SCALE_Y);
+		console.log(adj_width)
+		//console.log(multiplier)
+		for (var i in new_map.areas){
+			for (var j in new_map.areas[i]["coords"]){
+				if ((j%2) == 0){
+					const x_perc = new_map.areas[i]["coords"][j]/this.MAP_SCALE_X
+					//console.log(x_perc)
+					const x_new = adj_width * x_perc
+					//console.log(x_new)
+					new_map.areas[i]["coords"][j] = x_new
+				}
+				else{
+					const y_perc = new_map.areas[i]["coords"][j]/this.MAP_SCALE_Y
+					const y_new =  adj_height * y_perc
+					new_map.areas[i]["coords"][j] = y_new
+				}
+			}
+		}
+		console.log(new_map)
+		this.map = new_map
+	}
 
 
 	//returns a blank map
@@ -48,10 +78,15 @@ class Map{
 		}
 	);}
 
-	makeTextOnMapVisible(id){
+	makeTextOnMapVisible(id, hide = false){
+		if (hide){
+			this.curr_vis = -1
+			return
+		}
 		let cnt = 0;
 		this.curr_vis = id
 	}
+
 
 	//adds a hotspot/area to the image map
 	addAreaToMap(coordinates, text = ""){
@@ -137,13 +172,13 @@ class Map{
 		       		left : x.toString() + "px",
 		       		top : y.toString() + "px",
 		       		zIndex: 10,
-		       		fontSize : "20px",
-		       		color: "orange",
+		       		color: "white",
 		       		fontWeight: 900,
 		       		visibility: vis,
 		       		MozUserSelect:"none",
 					WebkitUserSelect:"none",
 					msUserSelect:"none",
+					pointerEvents:"none"
 
 		       }
 		       this.textMap.push(<span key={d.name} style={CSSPosition}>{d.name}</span>);
